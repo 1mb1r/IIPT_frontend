@@ -6,14 +6,14 @@ function* fetchNews() {
   try {
     const { data } = yield call(Api.get, '/news');
     const response = data;
-    yield put({ type: 'SET_NEWS_SUCCEEDED', news: response });
+    yield put({ type: 'NEWS_RECEIVED', news: response });
   } catch (e) {
-    yield put({ type: 'SET_NEWS_FAILED', message: e.message });
+    yield put({ type: 'NEWS_REJECTED', error: e.message });
   }
 }
 
 function* watchFetchNews() {
-  yield takeEvery('SET_NEWS', fetchNews);
+  yield takeEvery('NEWS_REQUESTED', fetchNews);
 }
 
 export default watchFetchNews;

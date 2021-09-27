@@ -1,7 +1,7 @@
 import ActionTypes from '../constants/action-types';
 
 export const setNews = (news) => ({
-  type: ActionTypes.SET_NEWS,
+  type: ActionTypes.NEWS_REQUESTED,
   payload: news,
 });
 

@@ -1,5 +1,5 @@
 const ActionTypes = {
-  SET_NEWS: 'SET_NEWS',
+  NEWS_REQUESTED: 'NEWS_REQUESTED',
 };
 
 export default ActionTypes;

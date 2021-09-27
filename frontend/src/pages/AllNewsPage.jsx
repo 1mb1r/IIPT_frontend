@@ -1,26 +1,19 @@
 import React, { useEffect } from 'react';
-// import axios from 'axios';
-import { useDispatch } from 'react-redux';
+import { Alert } from 'antd';
+import { useDispatch, useSelector } from 'react-redux';
 import { setNews } from '../redux/actions/NewsActions';
 import NewsList from '../components/news/NewsList';
 
 const AllNewsPage = () => {
   const dispatch = useDispatch();
-  // const fetchNews = async () => {
-  //   await axios
-  //     .get('http://localhost:3000/news')
-  //     .then((response) => dispatch(setNews(response.data)))
-  //     .catch((err) => {
-  //       console.error('Err: ', err);
-  //     });
-  // };
-
+  const error = useSelector((state) => state.allNews.error);
   useEffect(() => {
     dispatch(setNews());
-  }, []);
+  }, [dispatch]);
 
   return (
     <div>
+      {error && <Alert message={error} type="error" />}
       <NewsList />
     </div>
   );
