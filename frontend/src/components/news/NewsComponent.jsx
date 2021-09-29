@@ -9,7 +9,7 @@ const NewsComponent = ({
 }) => {
   const { Meta } = Card;
   return (
-    <div className="news-cards__card card" key={id}>
+    <div className="news-cards__card card">
       <Link to={`/news/${id}`}>
         <Card
           style={{ width: 300 }}

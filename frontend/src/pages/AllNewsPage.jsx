@@ -12,31 +12,36 @@ const AllNewsPage = () => {
     dispatch(setNews());
   }, [dispatch]);
 
+  const allFiltersOptions = ['all', 'tags', 'authors'];
   const news = useSelector((state) => state.allNews.news);
-  const [searchParam, setSearchParam] = useState('');
-  const [filterParam, setFilterParam] = useState('all');
+  const [searchState, setSearchState] = useState('');
+  const [filterState, setFilterState] = useState('all');
   const [searchResult, setSearchResult] = useState([]);
 
-  useEffect(() => {
-    if (filterParam === 'all') {
-      const result = news.filter((item) => item.title.toLowerCase().includes(searchParam)
-      || item.author.toLowerCase().includes(searchParam)
-      || item.tags.includes(searchParam));
-      setSearchResult(result);
+  const normalizeStringAndSearch = (fieldValue) => fieldValue.toLowerCase().replaceAll('ё', 'е').includes(searchState);
+
+  const searchNewsByFilter = () => {
+    let result = [];
+    if (filterState === 'all') {
+      result = news.filter((item) => allFiltersOptions.some((option) => normalizeStringAndSearch(item[option === 'all' ? 'title' : option])));
     } else {
-      const result = news.filter((item) => item[filterParam].toLowerCase().includes(searchParam));
-      setSearchResult(result);
+      result = news.filter((item) => normalizeStringAndSearch(item[filterState]));
     }
-  }, [searchParam, news, filterParam]);
+    return result;
+  };
+
+  useEffect(() => {
+    setSearchResult(searchNewsByFilter());
+  }, [searchState, news, filterState]);
 
   const handleChange = (event) => {
     const { value } = event.target;
-    setSearchParam(value.toLowerCase());
+    setSearchState(value.toLowerCase());
   };
 
   const handleChangeFilter = (event) => {
     const { value } = event.target;
-    setFilterParam(value);
+    setFilterState(value);
   };
 
   return (
@@ -47,18 +52,19 @@ const AllNewsPage = () => {
         defaultValue="all"
         onChange={handleChangeFilter}
       >
-        <option className="selector__all" value="all">by all</option>
-        <option className="selector__author" value="author">by authors</option>
-        <option className="selector__tags" value="tags">by tags</option>
+        {allFiltersOptions.map((option) => (
+          <option key={option} className={`selector__${option}`} value={option}>{`by ${option}`}</option>
+        ))}
       </select>
       <input className="all-news__search" onChange={handleChange} type="search" />
       <div className="all-news__news-cards news-cards">
         {searchResult.map((el) => (
           <NewsComponent
+            key={el.id}
             id={el.id}
             title={el.title}
             content={el.content}
-            tags={el.tags}
+            tags={el.tag}
             author={el.author}
             image={el.image}
           />
