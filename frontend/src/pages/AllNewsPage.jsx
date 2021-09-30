@@ -75,7 +75,7 @@ const AllNewsPage = () => {
         ))}
       </div>
       <Pagination
-        onChange={(page) => setCurrentPage(page)}
+        onChange={(page) => setCurrentPage(page - 1)}
         total={totalPages}
         current={currentPage}
         pageSize={newsPerPage}
