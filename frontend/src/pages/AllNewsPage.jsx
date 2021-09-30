@@ -12,7 +12,7 @@ const AllNewsPage = () => {
     dispatch(setNews());
   }, [dispatch]);
   const newsPerPage = 1;
-  const allFiltersOptions = ['all', 'tag', 'author'];
+  const allFiltersOptions = ['all', 'tags', 'authors'];
   const news = useSelector((state) => state.allNews.news);
   const [currentPage, setCurrentPage] = useState(1);
   const [searchState, setSearchState] = useState('');
