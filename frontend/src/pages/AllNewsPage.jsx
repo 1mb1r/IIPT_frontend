@@ -5,16 +5,17 @@ import { setNews } from '../redux/actions/NewsActions';
 import NewsComponent from '../components/news/NewsComponent';
 import './AllNewsPage.css';
 
+const newsPerPage = 1;
+
 const AllNewsPage = () => {
   const dispatch = useDispatch();
   const error = useSelector((state) => state.allNews.error);
   useEffect(() => {
     dispatch(setNews());
   }, [dispatch]);
-  const newsPerPage = 1;
   const allFiltersOptions = ['all', 'tags', 'authors'];
   const news = useSelector((state) => state.allNews.news);
-  const [currentPage, setCurrentPage] = useState(1);
+  const [currentPage, setCurrentPage] = useState(0);
   const [searchState, setSearchState] = useState('');
   const [filterState, setFilterState] = useState('all');
   const [searchResult, setSearchResult] = useState([]);
@@ -27,13 +28,13 @@ const AllNewsPage = () => {
     } else {
       result = news.filter((item) => normalizeStringAndSearch(item[filterState]));
     }
-    setTotalPages(result.length / newsPerPage);
+    setTotalPages(Math.ceil(result.length / newsPerPage));
     return result;
   };
 
   useEffect(() => {
     setSearchResult(searchNewsByFilter());
-    setCurrentPage(1);
+    setCurrentPage(0);
   }, [searchState, news, filterState]);
 
   const handleChange = (event) => {
@@ -60,8 +61,8 @@ const AllNewsPage = () => {
       </select>
       <input className="all-news__search" onChange={handleChange} type="search" />
       <div className="all-news__news-cards news-cards">
-        {searchResult.slice((currentPage - 1) * newsPerPage,
-          currentPage * newsPerPage).map((el) => (
+        {searchResult.slice(currentPage * newsPerPage,
+          (currentPage + 1) * newsPerPage).map((el) => (
             <NewsComponent
               key={el.id}
               id={el.id}
@@ -77,7 +78,7 @@ const AllNewsPage = () => {
         onChange={(page) => setCurrentPage(page)}
         total={totalPages}
         current={currentPage}
-        pageSize={1}
+        pageSize={newsPerPage}
       />
     </div>
   );
