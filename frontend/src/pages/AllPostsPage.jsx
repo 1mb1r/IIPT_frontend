@@ -1,3 +1,4 @@
+/* eslint-disable no-console */
 import React, { useEffect, useState } from 'react';
 import { Alert, Pagination } from 'antd';
 import { useDispatch, useSelector } from 'react-redux';
@@ -36,6 +37,7 @@ const AllPostsPage = () => {
   useEffect(() => {
     setSearchResult(searchPostsByFilter());
     setCurrentPage(0);
+  // eslint-disable-next-line react-hooks/exhaustive-deps
   }, [searchState, posts, filterState]);
 
   const handleChange = (event) => {

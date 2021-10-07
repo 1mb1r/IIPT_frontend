@@ -7,4 +7,5 @@ const reducers = combineReducers({
   allPosts: postsReducer,
   userData: userReducer,
 });
+
 export default reducers;

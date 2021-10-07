@@ -1,3 +1,4 @@
+/* eslint-disable no-console */
 import React, { useEffect, useState } from 'react';
 import PropTypes from 'prop-types';
 import { useDispatch, useSelector } from 'react-redux';
@@ -20,7 +21,7 @@ const UserPage = (props) => {
   const dispatch = useDispatch();
   useEffect(() => {
     dispatch(getUser(id));
-  }, [dispatch, allPosts]);
+  }, [dispatch, allPosts, id]);
   const { userData, fetching, error } = useSelector((state) => state.userData);
   const { posts } = userData;
   const [modalType, setModalType] = useState('');
