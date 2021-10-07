@@ -13,6 +13,8 @@ import { getUser, editUser, sendPost } from '../../redux/actions/postsActionGene
 import './UserPage.css';
 
 const postsPerPage = 1;
+const editType = 'edit';
+const createType = 'create';
 
 const UserPage = (props) => {
   const { match } = props;
@@ -38,12 +40,18 @@ const UserPage = (props) => {
 
   const handleOk = () => {
     setIsModalVisible(false);
-    if (modalType === 'edit') {
+    if (modalType === editType) {
       const editedUserData = { username: usernameValue, id, token };
       dispatch(editUser(editedUserData));
-    } else if (modalType === 'create') {
+    } else if (modalType === createType) {
       const postData = {
-        title: titleValue, content: contentValue, image: 'url', tag: tagValue, author: userData.username, userId: id, token,
+        title: titleValue,
+        content: contentValue,
+        image: 'url',
+        tag: tagValue,
+        author: userData.username,
+        userId: id,
+        token,
       };
       dispatch(sendPost(postData));
     }
@@ -82,10 +90,10 @@ const UserPage = (props) => {
         />
         <div className="user-info__username username">
           <h1 className="username__header">{userData.username}</h1>
-          <Button className="username__edit-button" type="primary" onClick={() => handleModalType('edit')}>Edit profile</Button>
+          <Button className="username__edit-button" type="primary" onClick={() => handleModalType(editType)}>Edit profile</Button>
         </div>
       </div>
-      <Button className="user-page__add-post" type="primary" onClick={() => handleModalType('create')}>Add new post</Button>
+      <Button className="user-page__add-post" type="primary" onClick={() => handleModalType(createType)}>Add new post</Button>
       <div className="user-page__posts-cards posts-cards">
         {posts.slice(currentPage * postsPerPage,
           (currentPage + 1) * postsPerPage).map((el) => (
@@ -109,12 +117,12 @@ const UserPage = (props) => {
         />
       </div>
       <Modal title="Basic Modal" visible={isModalVisible} onOk={handleOk} onCancel={handleCancel}>
-        { modalType === 'edit' && (
+        { modalType === editType && (
           <Form.Item name="username" label="New username" rules={[{ required: true }]} onChange={(event) => setUsernameValue(event.target.value)}>
             <Input />
           </Form.Item>
         )}
-        { modalType === 'create' && (
+        { modalType === createType && (
           <div className="modal__create">
             <Form.Item name="title" label="Title" rules={[{ required: true }]} onChange={(event) => setTitleValue(event.target.value)}>
               <Input />

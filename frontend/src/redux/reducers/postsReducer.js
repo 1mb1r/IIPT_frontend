@@ -1,3 +1,5 @@
+import ActionTypes from '../constants/action-types';
+
 const initialState = {
   posts: [],
   fetching: false,
@@ -6,21 +8,21 @@ const initialState = {
 
 const postsReducer = (state = initialState, action) => {
   switch (action.type) {
-    case 'POSTS_REQUESTED':
+    case ActionTypes.POSTS_REQUESTED:
       return { ...state, error: null, fetching: true };
-    case 'POSTS_RECEIVED':
+    case ActionTypes.POSTS_RECEIVED:
       return {
         ...state, posts: action.payload, fetching: false, error: null,
       };
-    case 'POSTS_REJECTED':
+    case ActionTypes.POSTS_REJECTED:
       return { ...state, error: action.error, fetching: false };
-    case 'SEND_POST_REQUESTED':
+    case ActionTypes.SEND_POST_REQUESTED:
       return { ...state, error: null, fetching: true };
-    case 'SEND_POST_RECEIVED':
+    case ActionTypes.SEND_POST_RECEIVED:
       return {
         ...state, posts: action.payload, fetching: false, error: null,
       };
-    case 'SEND_POST_REJECTED':
+    case ActionTypes.SEND_POST_REJECTED:
       return { ...state, error: action.error, fetching: false };
     default:
       return state;

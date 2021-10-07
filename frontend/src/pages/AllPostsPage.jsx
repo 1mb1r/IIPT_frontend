@@ -21,7 +21,7 @@ const AllPostsPage = () => {
   const [searchState, setSearchState] = useState('');
   const [filterState, setFilterState] = useState('all');
   const [searchResult, setSearchResult] = useState([]);
-  const [totalPages, setTotalPages] = useState(0);
+  const totalPages = Math.ceil(searchResult.length / postsPerPage);
   const normalizeStringAndSearch = (fieldValue) => fieldValue.toLowerCase().replaceAll('ё', 'е').includes(searchState);
   const searchPostsByFilter = () => {
     let result = [];
@@ -30,7 +30,6 @@ const AllPostsPage = () => {
     } else {
       result = posts.filter((item) => normalizeStringAndSearch(item[filterState]));
     }
-    setTotalPages(Math.ceil(result.length / postsPerPage));
     return result;
   };
 

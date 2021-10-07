@@ -1,3 +1,5 @@
+import ActionTypes from '../constants/action-types';
+
 const initialState = {
   userData: { posts: [] },
   fetching: false,
@@ -6,21 +8,21 @@ const initialState = {
 
 const userReducer = (state = initialState, action) => {
   switch (action.type) {
-    case 'USER_REQUESTED':
+    case ActionTypes.USER_REQUESTED:
       return { ...state, error: null, fetching: true };
-    case 'USER_RECEIVED':
+    case ActionTypes.USER_RECEIVED:
       return {
         ...state, userData: action.payload, fetching: false,
       };
-    case 'USER_REJECTED':
+    case ActionTypes.USER_REJECTED:
       return { ...state, error: action.error, fetching: false };
-    case 'EDIT_USER_REQUESTED':
+    case ActionTypes.EDIT_USER_REQUESTED:
       return { ...state, error: null, fetching: true };
-    case 'EDIT_USER_RECEIVED':
+    case ActionTypes.EDIT_USER_RECEIVED:
       return {
         ...state, userData: action.payload, fetching: false,
       };
-    case 'EDIT_USER_REJECTED':
+    case ActionTypes.EDIT_USER_REJECTED:
       return { ...state, error: action.error, fetching: false };
     default:
       return state;
