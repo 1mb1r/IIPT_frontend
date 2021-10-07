@@ -11,9 +11,6 @@ dist/
 # Compiled Java class files
 *.class
 
-#Token
-frontend/src/token.js
-
 # Compiled Python bytecode
 *.py[cod]
 
