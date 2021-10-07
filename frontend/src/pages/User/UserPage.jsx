@@ -7,7 +7,7 @@ import {
 
 import token from '../../token';
 import PostComponent from '../../components/posts/PostComponent';
-import { getUser, editUser, sendPost } from '../../redux/actions/postsActions';
+import { getUser, editUser, sendPost } from '../../redux/actions/postsActionGenerators';
 
 import './UserPage.css';
 

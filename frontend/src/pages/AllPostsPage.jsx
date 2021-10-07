@@ -2,7 +2,7 @@ import React, { useEffect, useState } from 'react';
 import { Alert, Pagination } from 'antd';
 import { useDispatch, useSelector } from 'react-redux';
 
-import { setPosts } from '../redux/actions/postsActions';
+import { setPosts } from '../redux/actions/postsActionGenerators';
 import PostComponent from '../components/posts/PostComponent';
 
 import './AllPostsPage.css';
