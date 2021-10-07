@@ -1,20 +1,21 @@
 import React, { useEffect, useState } from 'react';
 import { Alert, Pagination } from 'antd';
 import { useDispatch, useSelector } from 'react-redux';
-import { setPosts } from '../redux/actions/PostsActions';
+
+import { setPosts } from '../redux/actions/postsActions';
 import PostComponent from '../components/posts/PostComponent';
+
 import './AllPostsPage.css';
 
 const postsPerPage = 1;
 
 const AllPostsPage = () => {
   const dispatch = useDispatch();
-  const error = useSelector((state) => state.allPosts.error);
   useEffect(() => {
     dispatch(setPosts());
   }, [dispatch]);
   const allFiltersOptions = ['all', 'tag', 'author'];
-  const posts = useSelector((state) => state.allPosts.posts);
+  const { posts, fetching, error } = useSelector((state) => state.allPosts);
   const [currentPage, setCurrentPage] = useState(0);
   const [searchState, setSearchState] = useState('');
   const [filterState, setFilterState] = useState('all');
@@ -47,9 +48,20 @@ const AllPostsPage = () => {
     setFilterState(value);
   };
 
+  if (fetching) {
+    return 'Loading...';
+  }
+
+  if (error) {
+    if (process.env.NODE_ENV !== 'production') {
+      console.error(error);
+      return <Alert message={error} type="error" />;
+    }
+    return 'Error: hidden';
+  }
+
   return (
     <div className="app__all-posts all-posts">
-      {error && <Alert message={error} type="error" />}
       <select
         className="all-posts__selector selector"
         defaultValue="all"

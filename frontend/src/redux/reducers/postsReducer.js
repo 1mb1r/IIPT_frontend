@@ -10,7 +10,7 @@ const postsReducer = (state = initialState, action) => {
       return { ...state, error: null, fetching: true };
     case 'POSTS_RECEIVED':
       return {
-        ...state, posts: action.posts, fetching: false, error: null,
+        ...state, posts: action.payload, fetching: false, error: null,
       };
     case 'POSTS_REJECTED':
       return { ...state, error: action.error, fetching: false };
@@ -18,7 +18,7 @@ const postsReducer = (state = initialState, action) => {
       return { ...state, error: null, fetching: true };
     case 'SEND_POST_RECEIVED':
       return {
-        ...state, posts: action.posts, fetching: false, error: null,
+        ...state, posts: action.payload, fetching: false, error: null,
       };
     case 'SEND_POST_REJECTED':
       return { ...state, error: action.error, fetching: false };

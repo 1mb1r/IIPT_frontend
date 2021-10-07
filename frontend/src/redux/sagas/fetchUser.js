@@ -1,22 +1,23 @@
 import { takeEvery } from '@redux-saga/core/effects';
 import { call, put } from 'redux-saga/effects';
+
 import Api from '../../api';
+import ActionTypes from '../constants/action-types';
 
 function* fetchUser(action) {
   try {
     const { data } = yield call(Api.get, `/users/${action.payload}`);
-    const response = data;
     yield put({
-      type: 'USER_RECEIVED',
-      userData: response,
+      type: ActionTypes.USER_RECEIVED,
+      payload: data,
     });
-  } catch (e) {
-    yield put({ type: 'USER_REJECTED', error: e.message });
+  } catch (error) {
+    yield put({ type: ActionTypes.USER_REJECTED, error: error.message });
   }
 }
 
 function* watchFetchUser() {
-  yield takeEvery('USER_REQUESTED', fetchUser);
+  yield takeEvery(ActionTypes.USER_REQUESTED, fetchUser);
 }
 
 export default watchFetchUser;

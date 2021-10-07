@@ -1,21 +1,11 @@
+import { createAction } from 'redux-actions';
+
 import ActionTypes from '../constants/action-types';
 
-export const setPosts = (posts) => ({
-  type: ActionTypes.POSTS_REQUESTED,
-  payload: posts,
-});
+export const setPosts = createAction(ActionTypes.POSTS_REQUESTED);
 
-export const getUser = (id) => ({
-  type: ActionTypes.USER_REQUESTED,
-  payload: id,
-});
+export const getUser = createAction(ActionTypes.USER_REQUESTED);
 
-export const editUser = (data) => ({
-  type: ActionTypes.EDIT_USER_REQUESTED,
-  payload: data,
-});
+export const editUser = createAction(ActionTypes.EDIT_USER_REQUESTED);
 
-export const sendPost = (postData) => ({
-  type: ActionTypes.SEND_POST_REQUESTED,
-  payload: postData,
-});
+export const sendPost = createAction(ActionTypes.SEND_POST_REQUESTED);

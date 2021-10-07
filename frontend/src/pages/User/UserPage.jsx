@@ -4,9 +4,11 @@ import { useDispatch, useSelector } from 'react-redux';
 import {
   Avatar, Alert, Pagination, Button, Modal, Input, Form,
 } from 'antd';
+
 import token from '../../token';
 import PostComponent from '../../components/posts/PostComponent';
-import { getUser, editUser, sendPost } from '../../redux/actions/PostsActions';
+import { getUser, editUser, sendPost } from '../../redux/actions/postsActions';
+
 import './UserPage.css';
 
 const postsPerPage = 1;
@@ -19,8 +21,7 @@ const UserPage = (props) => {
   useEffect(() => {
     dispatch(getUser(id));
   }, [dispatch, allPosts]);
-  const { userData } = useSelector((state) => state.userData);
-  const error = useSelector((state) => state.userData.error);
+  const { userData, fetching, error } = useSelector((state) => state.userData);
   const { posts } = userData;
   const [modalType, setModalType] = useState('');
   const [currentPage, setCurrentPage] = useState(0);
@@ -55,7 +56,19 @@ const UserPage = (props) => {
     setModalType(type);
     showModal();
   };
-  if (error) { return (<Alert message={error} type="error" />); }
+
+  if (fetching) {
+    return 'Loading...';
+  }
+
+  if (error) {
+    if (process.env.NODE_ENV !== 'production') {
+      console.error(error);
+      return <Alert message={error} type="error" />;
+    }
+    return 'Error: hidden';
+  }
+
   return (
     <div className="app__user-page user-page">
       <div className="user-page__user-info user-info">

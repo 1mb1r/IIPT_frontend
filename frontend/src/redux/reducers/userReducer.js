@@ -10,7 +10,7 @@ const userReducer = (state = initialState, action) => {
       return { ...state, error: null, fetching: true };
     case 'USER_RECEIVED':
       return {
-        ...state, userData: action.userData, fetching: false,
+        ...state, userData: action.payload, fetching: false,
       };
     case 'USER_REJECTED':
       return { ...state, error: action.error, fetching: false };
@@ -18,7 +18,7 @@ const userReducer = (state = initialState, action) => {
       return { ...state, error: null, fetching: true };
     case 'EDIT_USER_RECEIVED':
       return {
-        ...state, userData: action.userData, fetching: false,
+        ...state, userData: action.payload, fetching: false,
       };
     case 'EDIT_USER_REJECTED':
       return { ...state, error: action.error, fetching: false };

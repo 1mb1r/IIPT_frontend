@@ -1,4 +1,5 @@
 import { all } from 'redux-saga/effects';
+
 import fetchPosts from './sagas/fetchPosts';
 import fetchUser from './sagas/fetchUser';
 import editUser from './sagas/editUser';

@@ -1,6 +1,8 @@
 import { takeEvery } from '@redux-saga/core/effects';
 import { call, put } from 'redux-saga/effects';
+
 import Api from '../../api';
+import ActionTypes from '../constants/action-types';
 
 function setPost(payload) {
   const {
@@ -10,27 +12,23 @@ function setPost(payload) {
     post: {
       title, content, tag, image, author, user_id: userId,
     },
-  }, {
-    headers: { Authorization: `Bearer ${token}` },
-    'Content-Type': 'application/json',
-  });
+  }, { token });
 }
 
 function* sendPost(action) {
   try {
     const { data } = yield call(setPost, action.payload);
-    const response = data;
     yield put({
-      type: 'SEND_POST_RECEIVED',
-      posts: response,
+      type: ActionTypes.SEND_POST_RECEIVED,
+      payload: data,
     });
-  } catch (e) {
-    yield put({ type: 'SEND_POST_REJECTED', error: e.message });
+  } catch (error) {
+    yield put({ type: ActionTypes.SEND_POST_REJECTED, error: error.message });
   }
 }
 
 function* watchSendPost() {
-  yield takeEvery('SEND_POST_REQUESTED', sendPost);
+  yield takeEvery(ActionTypes.SEND_POST_REQUESTED, sendPost);
 }
 
 export default watchSendPost;
