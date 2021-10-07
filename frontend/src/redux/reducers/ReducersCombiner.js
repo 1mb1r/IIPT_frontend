@@ -1,7 +1,9 @@
 import { combineReducers } from 'redux';
-import NewsReducer from './NewsReducer';
+import postsReducer from './postsReducer';
+import userReducer from './userReducer';
 
 const reducers = combineReducers({
-  allNews: NewsReducer,
+  allPosts: postsReducer,
+  userData: userReducer,
 });
 export default reducers;

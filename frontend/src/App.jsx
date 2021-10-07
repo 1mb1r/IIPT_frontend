@@ -1,6 +1,7 @@
 import React from 'react';
 import { BrowserRouter as Router, Switch, Route } from 'react-router-dom';
-import AllNewsPage from './pages/AllNewsPage';
+import AllPostsPage from './pages/AllPostsPage';
+import UserPage from './pages/User/UserPage';
 import Header from './components/Header';
 
 function App() {
@@ -9,7 +10,8 @@ function App() {
       <Router>
         <Header />
         <Switch>
-          <Route path="/" exact component={AllNewsPage} />
+          <Route path="/" exact component={AllPostsPage} />
+          <Route path="/users/:id" component={UserPage} />
         </Switch>
       </Router>
     </div>

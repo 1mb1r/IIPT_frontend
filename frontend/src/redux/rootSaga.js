@@ -1,10 +1,16 @@
 import { all } from 'redux-saga/effects';
-import fetchNews from './sagas/fetchNews';
+import fetchPosts from './sagas/fetchPosts';
+import fetchUser from './sagas/fetchUser';
+import editUser from './sagas/editUser';
+import sendPost from './sagas/sendPost';
 
 function* rootSaga() {
   yield all(
     [
-      fetchNews(),
+      fetchPosts(),
+      fetchUser(),
+      editUser(),
+      sendPost(),
     ],
   );
 }
