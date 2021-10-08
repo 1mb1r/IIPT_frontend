@@ -7,7 +7,9 @@ import {
 } from 'antd';
 
 import PostComponent from '../../components/posts/PostComponent';
-import { getUser, editUser, sendPost } from '../../redux/actions/postsActionGenerators';
+import {
+  getUser, editUser, sendPost, authUser,
+} from '../../redux/actions/postsActionGenerators';
 
 import './UserPage.css';
 
@@ -20,9 +22,15 @@ const UserPage = (props) => {
   const { id } = match.params;
   const { allPosts } = useSelector((state) => state);
   const dispatch = useDispatch();
+
   useEffect(() => {
     dispatch(getUser(id));
   }, [dispatch, allPosts, id]);
+
+  useEffect(() => {
+    dispatch(authUser());
+  }, [dispatch]);
+
   const { userData, fetching, error } = useSelector((state) => state.userData);
   const { posts } = userData;
   const [modalType, setModalType] = useState('');
@@ -33,7 +41,7 @@ const UserPage = (props) => {
   const [titleValue, setTitleValue] = useState('');
   const [tagValue, setTagValue] = useState('');
   const [contentValue, setContentValue] = useState('');
-  const currentUser = JSON.parse(localStorage.getItem('currentUser'));
+  const { currentUser } = useSelector((state) => state.userData);
   const showModal = () => {
     setIsModalVisible(true);
   };

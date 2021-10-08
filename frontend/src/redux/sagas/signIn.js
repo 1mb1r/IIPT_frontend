@@ -3,6 +3,7 @@ import { call, put } from 'redux-saga/effects';
 
 import Api from '../../api';
 import ActionTypes from '../constants/action-types';
+import { setToken } from '../../lib/local-storage';
 
 function* signIn(action) {
   const info = { user: action.payload };
@@ -12,8 +13,7 @@ function* signIn(action) {
       type: ActionTypes.SIGN_IN_RECEIVED,
       payload: response,
     });
-    yield localStorage.setItem('token', JSON.stringify(response.headers.authorization));
-    yield localStorage.setItem('currentUser', JSON.stringify(response.data.user));
+    yield setToken(response.headers.authorization);
   } catch (error) {
     yield put({ type: ActionTypes.SIGN_IN_REJECTED, error: error.message });
   }

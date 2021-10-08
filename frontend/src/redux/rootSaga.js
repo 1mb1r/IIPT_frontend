@@ -7,6 +7,7 @@ import sendPost from './sagas/sendPost';
 import signOut from './sagas/signOut';
 import signIn from './sagas/signIn';
 import signUp from './sagas/signUp';
+import authUser from './sagas/authUser';
 
 function* rootSaga() {
   yield all(
@@ -18,6 +19,7 @@ function* rootSaga() {
       signIn(),
       signOut(),
       signUp(),
+      authUser(),
     ],
   );
 }

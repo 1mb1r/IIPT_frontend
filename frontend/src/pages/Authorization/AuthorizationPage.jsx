@@ -9,6 +9,8 @@ import { UserOutlined, LockOutlined } from '@ant-design/icons';
 
 import { signIn } from '../../redux/actions/postsActionGenerators';
 
+const bcrypt = require('bcryptjs');
+
 const AuthorizationPage = () => {
   const dispatch = useDispatch();
   const { token, fetching, error } = useSelector((state) => state.userData);
@@ -31,10 +33,6 @@ const AuthorizationPage = () => {
     return 'Error: hidden';
   }
 
-  const onFinish = () => {
-    handleLogIn();
-  };
-
   if (token) {
     history.push('/');
   }
@@ -43,7 +41,7 @@ const AuthorizationPage = () => {
     <Form
       name="normal_login"
       className="login-form"
-      onFinish={onFinish}
+      onFinish={handleLogIn}
     >
       <Form.Item
         name="email"
@@ -53,7 +51,7 @@ const AuthorizationPage = () => {
         <Input prefix={<UserOutlined className="site-form-item-icon" />} placeholder="Email" />
       </Form.Item>
       <Form.Item
-        onChange={(event) => setPassword(event.target.value)}
+        onChange={(event) => setPassword(bcrypt.hashSync(event.target.value, 12))}
         name="password"
         rules={[{ required: true, message: 'Please input your Password!' }]}
       >

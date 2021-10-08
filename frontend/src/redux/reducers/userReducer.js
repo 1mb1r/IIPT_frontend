@@ -40,8 +40,6 @@ const userReducer = (state = initialState, action) => {
     case ActionTypes.SIGN_OUT_REQUESTED:
       return { ...state, error: null, fetching: true };
     case ActionTypes.SIGN_OUT_RECEIVED:
-      localStorage.removeItem('token');
-      localStorage.removeItem('currentUser');
       return {
         ...state, token: null, fetching: false,
       };
@@ -57,6 +55,16 @@ const userReducer = (state = initialState, action) => {
         fetching: false,
       };
     case ActionTypes.SIGN_UP_REJECTED:
+      return { ...state, error: action.error, fetching: false };
+    case ActionTypes.AUTH_REQUESTED:
+      return { ...state, error: null, fetching: true };
+    case ActionTypes.AUTH_RECEIVED:
+      return {
+        ...state,
+        currentUser: action.payload.data.user,
+        fetching: false,
+      };
+    case ActionTypes.AUTH_REJECTED:
       return { ...state, error: action.error, fetching: false };
     default:
       return state;

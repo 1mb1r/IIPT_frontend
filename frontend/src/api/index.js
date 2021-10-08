@@ -1,15 +1,18 @@
 import axios from 'axios';
 
+import { readToken } from '../lib/local-storage';
+
 const Api = axios.create({
   baseURL: process.env.REACT_APP_API_URL,
 });
 
 Api.interceptors.request.use(
   (config) => {
-    const customConfig = config;
-    customConfig.headers.Authorization = JSON.parse(localStorage.getItem('token'));
-    customConfig.headers['Content-Type'] = 'application/json';
-    return customConfig;
+    const { headers } = config;
+    headers.Authorization = readToken();
+    console.log(headers.Authorization);
+    headers['Content-Type'] = 'application/json';
+    return config;
   },
   (error) => Promise.reject(error),
 );
