@@ -1,5 +1,4 @@
-.news-cards {
+.user-info, .posts-cards {
     display: flex;
     justify-content: space-around;
-    flex-wrap: wrap;
 }

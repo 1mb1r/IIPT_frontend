@@ -1,16 +1,17 @@
 import React from 'react';
 import PropTypes from 'prop-types';
 import { Link } from 'react-router-dom';
-import { Card, Avatar } from 'antd';
+import { Card } from 'antd';
+
 import 'antd/dist/antd.css';
 
-const NewsComponent = ({
-  id, title, author, content, tags, image,
+const PostComponent = ({
+  title, author, content, tags, image, userId,
 }) => {
   const { Meta } = Card;
   return (
-    <div className="news-cards__card card">
-      <Link to={`/news/${id}`}>
+    <div className="posts-cards__card card">
+      <Link to={`/users/${userId}`}>
         <Card
           style={{ width: 300 }}
           cover={(
@@ -21,7 +22,6 @@ const NewsComponent = ({
               )}
         >
           <Meta
-            avatar={<Avatar src="https://zos.alipayobjects.com/rmsportal/ODTLcjxAfvqbxHnVXCYX.png" />}
             title={title}
             description={content}
           />
@@ -35,10 +35,10 @@ const NewsComponent = ({
   );
 };
 
-export default NewsComponent;
+export default PostComponent;
 
-NewsComponent.propTypes = {
-  id: PropTypes.number.isRequired,
+PostComponent.propTypes = {
+  userId: PropTypes.number.isRequired,
   title: PropTypes.string.isRequired,
   author: PropTypes.string.isRequired,
   content: PropTypes.string.isRequired,
