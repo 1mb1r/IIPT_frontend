@@ -6,11 +6,10 @@ const Api = axios.create({
 
 Api.interceptors.request.use(
   (config) => {
-    const { headers } = config;
-    if (config.token) {
-      headers.Authorization = `Bearer ${config.token}`;
-    }
-    return config;
+    const customConfig = config;
+    customConfig.headers.Authorization = JSON.parse(localStorage.getItem('token'));
+    customConfig.headers['Content-Type'] = 'application/json';
+    return customConfig;
   },
   (error) => Promise.reject(error),
 );

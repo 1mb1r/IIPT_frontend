@@ -6,13 +6,13 @@ import ActionTypes from '../constants/action-types';
 
 function setPost(payload) {
   const {
-    title, content, tag, image, author, userId, token,
+    title, content, tag, image, author, userId,
   } = payload;
   return Api.post('/posts', {
     post: {
       title, content, tag, image, author, user_id: userId,
     },
-  }, { token });
+  });
 }
 
 function* sendPost(action) {

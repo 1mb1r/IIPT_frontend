@@ -6,7 +6,6 @@ import {
   Avatar, Alert, Pagination, Button, Modal, Input, Form,
 } from 'antd';
 
-import token from '../../token';
 import PostComponent from '../../components/posts/PostComponent';
 import { getUser, editUser, sendPost } from '../../redux/actions/postsActionGenerators';
 
@@ -34,6 +33,7 @@ const UserPage = (props) => {
   const [titleValue, setTitleValue] = useState('');
   const [tagValue, setTagValue] = useState('');
   const [contentValue, setContentValue] = useState('');
+  const currentUser = JSON.parse(localStorage.getItem('currentUser'));
   const showModal = () => {
     setIsModalVisible(true);
   };
@@ -41,7 +41,7 @@ const UserPage = (props) => {
   const handleOk = () => {
     setIsModalVisible(false);
     if (modalType === editType) {
-      const editedUserData = { username: usernameValue, id, token };
+      const editedUserData = { username: usernameValue, id };
       dispatch(editUser(editedUserData));
     } else if (modalType === createType) {
       const postData = {
@@ -51,7 +51,6 @@ const UserPage = (props) => {
         tag: tagValue,
         author: userData.username,
         userId: id,
-        token,
       };
       dispatch(sendPost(postData));
     }
@@ -90,10 +89,10 @@ const UserPage = (props) => {
         />
         <div className="user-info__username username">
           <h1 className="username__header">{userData.username}</h1>
-          <Button className="username__edit-button" type="primary" onClick={() => handleModalType(editType)}>Edit profile</Button>
+          {currentUser && currentUser?.id === userData.id && <Button className="username__edit-button" type="primary" onClick={() => handleModalType(editType)}>Edit profile</Button>}
         </div>
       </div>
-      <Button className="user-page__add-post" type="primary" onClick={() => handleModalType(createType)}>Add new post</Button>
+      {currentUser && currentUser?.id === userData.id && <Button className="user-page__add-post" type="primary" onClick={() => handleModalType(createType)}>Add new post</Button> }
       <div className="user-page__posts-cards posts-cards">
         {posts.slice(currentPage * postsPerPage,
           (currentPage + 1) * postsPerPage).map((el) => (
