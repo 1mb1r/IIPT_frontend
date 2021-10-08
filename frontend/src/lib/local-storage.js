@@ -5,7 +5,11 @@ export const deleteToken = () => {
 };
 
 export const readToken = () => {
-  try { return JSON.parse(localStorage.getItem('token')); } catch (error) { console.error(error.message); }
+  try {
+    const token = JSON.parse(localStorage.getItem('token'));
+    if (!token) throw new Error('no token');
+    return token;
+  } catch (error) { console.error(error.message); return null; }
 };
 
 export const setToken = (response) => {

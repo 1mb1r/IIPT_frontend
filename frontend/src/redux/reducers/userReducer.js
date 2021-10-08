@@ -1,11 +1,13 @@
 import ActionTypes from '../constants/action-types';
 
+import { readToken } from '../../lib/local-storage';
+
 const initialState = {
   userData: { posts: [] },
   fetching: false,
   error: null,
-  currentUser: JSON.parse(localStorage.getItem('currentUser')),
-  token: JSON.parse(localStorage.getItem('token')),
+  currentUser: null,
+  token: readToken() || '',
 };
 
 const userReducer = (state = initialState, action) => {

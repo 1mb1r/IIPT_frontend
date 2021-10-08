@@ -8,6 +8,7 @@ import { useDispatch, useSelector } from 'react-redux';
 import { UserOutlined, LockOutlined } from '@ant-design/icons';
 
 import { signUp } from '../../redux/actions/postsActionGenerators';
+import { getHashedPassword } from '../../lib/utils';
 
 const RegistrationPage = () => {
   const dispatch = useDispatch();
@@ -61,7 +62,7 @@ const RegistrationPage = () => {
         <Input prefix={<UserOutlined className="site-form-item-icon" />} placeholder="Email" />
       </Form.Item>
       <Form.Item
-        onChange={(event) => setPassword(event.target.value)}
+        onChange={(event) => setPassword(getHashedPassword(event.target.value))}
         name="password"
         rules={[{ required: true, message: 'Please input your Password!' }]}
       >

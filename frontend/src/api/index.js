@@ -9,8 +9,7 @@ const Api = axios.create({
 Api.interceptors.request.use(
   (config) => {
     const { headers } = config;
-    headers.Authorization = readToken();
-    console.log(headers.Authorization);
+    headers.Authorization = (readToken() || '');
     headers['Content-Type'] = 'application/json';
     return config;
   },
