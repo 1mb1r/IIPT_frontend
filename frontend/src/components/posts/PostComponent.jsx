@@ -17,7 +17,7 @@ const PostComponent = ({
           cover={(
             <img
               alt={title}
-              src={image}
+              src={process.env.REACT_APP_API_URL + image}
             />
               )}
         >

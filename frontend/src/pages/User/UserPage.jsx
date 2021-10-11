@@ -33,11 +33,13 @@ const UserPage = (props) => {
 
   const { userData, fetching, error } = useSelector((state) => state.userData);
   const { posts } = userData;
+  const avatar = new FormData();
   const [modalType, setModalType] = useState('');
   const [currentPage, setCurrentPage] = useState(0);
   const totalPages = Math.ceil(posts.length / postsPerPage);
   const [isModalVisible, setIsModalVisible] = useState(false);
   const [usernameValue, setUsernameValue] = useState('');
+  const [image, setImage] = useState(null);
   const [titleValue, setTitleValue] = useState('');
   const [tagValue, setTagValue] = useState('');
   const [contentValue, setContentValue] = useState('');
@@ -55,7 +57,7 @@ const UserPage = (props) => {
       const postData = {
         title: titleValue,
         content: contentValue,
-        image: 'url',
+        image,
         tag: tagValue,
         author: userData.username,
         userId: id,
@@ -73,6 +75,15 @@ const UserPage = (props) => {
     showModal();
   };
 
+  const handleAvatar = (event) => {
+    avatar.append('avatar', event.target.files[0]);
+  };
+
+  const handleSetAvatar = () => {
+    const avatarData = { id, avatar };
+    dispatch(editUser(avatarData));
+  };
+
   if (fetching) {
     return 'Loading...';
   }
@@ -88,13 +99,20 @@ const UserPage = (props) => {
   return (
     <div className="app__user-page user-page">
       <div className="user-page__user-info user-info">
-        <Avatar
-          size={{
-            xxl: 200,
-          }}
-          src={userData.avatar}
-          className="user-info__avatar"
-        />
+        <div className="user-info__avatar avatar">
+          <Avatar
+            size={{
+              xxl: 200,
+            }}
+            src={process.env.REACT_APP_API_URL + userData.avatar.url}
+          />
+          {currentUser && currentUser?.id === userData.id && (
+          <div className="avatar__upload upload">
+            <input type="file" onChange={handleAvatar} />
+            <button type="submit" onClick={handleSetAvatar}>Upload avatar</button>
+          </div>
+          )}
+        </div>
         <div className="user-info__username username">
           <h1 className="username__header">{userData.username}</h1>
           {currentUser && currentUser?.id === userData.id && <Button className="username__edit-button" type="primary" onClick={() => handleModalType(editType)}>Edit profile</Button>}
@@ -111,7 +129,7 @@ const UserPage = (props) => {
               content={el.content}
               tags={el.tag}
               author={String(el.author)}
-              image={el.image}
+              image={el.image.url}
             />
         ))}
       </div>
@@ -137,9 +155,10 @@ const UserPage = (props) => {
             <Form.Item name="tag" label="Tag" rules={[{ required: true }]} onChange={(event) => setTagValue(event.target.value)}>
               <Input />
             </Form.Item>
-            <Form.Item name="Content" label="Content" rules={[{ required: true }]} onChange={(event) => setContentValue(event.target.value)}>
+            <Form.Item name="content" label="Content" rules={[{ required: true }]} onChange={(event) => setContentValue(event.target.value)}>
               <Input.TextArea />
             </Form.Item>
+            <input type="file" onChange={(event) => setImage(event.target.files[0])} />
           </div>
         )}
       </Modal>
