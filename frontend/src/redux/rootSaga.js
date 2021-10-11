@@ -4,6 +4,10 @@ import fetchPosts from './sagas/fetchPosts';
 import fetchUser from './sagas/fetchUser';
 import editUser from './sagas/editUser';
 import sendPost from './sagas/sendPost';
+import signOut from './sagas/signOut';
+import signIn from './sagas/signIn';
+import signUp from './sagas/signUp';
+import authUser from './sagas/authUser';
 
 function* rootSaga() {
   yield all(
@@ -12,6 +16,10 @@ function* rootSaga() {
       fetchUser(),
       editUser(),
       sendPost(),
+      signIn(),
+      signOut(),
+      signUp(),
+      authUser(),
     ],
   );
 }
