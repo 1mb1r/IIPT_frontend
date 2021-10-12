@@ -5,10 +5,9 @@ const usePaging = (postsPerPage, items) => {
   const totalPages = Math.ceil(items.length / postsPerPage);
   const pageItems = items.slice(currentPage * postsPerPage,
     (currentPage + 1) * postsPerPage);
-  const paging = {
+  return {
     totalPages, currentPage, setCurrentPage, pageItems,
   };
-  return paging;
 };
 
 export default usePaging;

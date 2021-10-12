@@ -12,6 +12,7 @@ import usePaging from '../../hooks/usePaging';
 import {
   getUser, editUser, authUser,
 } from '../../redux/actions/postsActionGenerators';
+import { getImageUrl } from '../../lib/utils';
 
 import './UserPage.css';
 
@@ -81,7 +82,7 @@ const UserPage = (props) => {
             size={{
               xxl: 200,
             }}
-            src={process.env.REACT_APP_API_URL + userData.avatar.url}
+            src={getImageUrl(userData.avatar.url)}
           />
           {currentUser && currentUser?.id === userData.id && (
           <div className="avatar__upload upload">
