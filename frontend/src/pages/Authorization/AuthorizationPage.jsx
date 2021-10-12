@@ -8,7 +8,7 @@ import { useDispatch, useSelector } from 'react-redux';
 import { UserOutlined, LockOutlined } from '@ant-design/icons';
 
 import { signIn } from '../../redux/actions/postsActionGenerators';
-import getHashedPassword from '../../lib/utils';
+import { getHashedPassword } from '../../lib/utils';
 
 const AuthorizationPage = () => {
   const dispatch = useDispatch();

@@ -6,8 +6,10 @@ import ActionTypes from '../constants/action-types';
 
 function updateUser(payload) {
   const { id, username, avatar } = payload;
-  if (avatar) return Api.put(`/users/${id}`, avatar);
-  return Api.put(`/users/${id}`, { username });
+  const formData = new FormData();
+  formData.append('username', username);
+  formData.append('avatar', avatar);
+  return Api.put(`/users/${id}`, formData);
 }
 
 function* editUser(action) {

@@ -3,12 +3,13 @@ import React, { useEffect, useState } from 'react';
 import PropTypes from 'prop-types';
 import { useDispatch, useSelector } from 'react-redux';
 import {
-  Avatar, Alert, Pagination, Button, Modal, Input, Form,
+  Avatar, Alert, Pagination, Button,
 } from 'antd';
 
 import PostComponent from '../../components/posts/PostComponent';
+import UserPageModal from '../../components/modal/UserPageModal';
 import {
-  getUser, editUser, sendPost, authUser,
+  getUser, editUser, authUser,
 } from '../../redux/actions/postsActionGenerators';
 
 import './UserPage.css';
@@ -33,41 +34,14 @@ const UserPage = (props) => {
 
   const { userData, fetching, error } = useSelector((state) => state.userData);
   const { posts } = userData;
-  const avatar = new FormData();
+  const [image, setImage] = useState(null);
   const [modalType, setModalType] = useState('');
   const [currentPage, setCurrentPage] = useState(0);
   const totalPages = Math.ceil(posts.length / postsPerPage);
   const [isModalVisible, setIsModalVisible] = useState(false);
-  const [usernameValue, setUsernameValue] = useState('');
-  const [image, setImage] = useState(null);
-  const [titleValue, setTitleValue] = useState('');
-  const [tagValue, setTagValue] = useState('');
-  const [contentValue, setContentValue] = useState('');
   const { currentUser } = useSelector((state) => state.userData);
   const showModal = () => {
     setIsModalVisible(true);
-  };
-
-  const handleOk = () => {
-    setIsModalVisible(false);
-    if (modalType === editType) {
-      const editedUserData = { username: usernameValue, id };
-      dispatch(editUser(editedUserData));
-    } else if (modalType === createType) {
-      const postData = {
-        title: titleValue,
-        content: contentValue,
-        image,
-        tag: tagValue,
-        author: userData.username,
-        userId: id,
-      };
-      dispatch(sendPost(postData));
-    }
-  };
-
-  const handleCancel = () => {
-    setIsModalVisible(false);
   };
 
   const handleModalType = (type) => {
@@ -76,11 +50,11 @@ const UserPage = (props) => {
   };
 
   const handleAvatar = (event) => {
-    avatar.append('avatar', event.target.files[0]);
+    setImage(event.target.files[0]);
   };
 
   const handleSetAvatar = () => {
-    const avatarData = { id, avatar };
+    const avatarData = { id, avatar: image };
     dispatch(editUser(avatarData));
   };
 
@@ -141,27 +115,11 @@ const UserPage = (props) => {
           pageSize={postsPerPage}
         />
       </div>
-      <Modal title="Basic Modal" visible={isModalVisible} onOk={handleOk} onCancel={handleCancel}>
-        { modalType === editType && (
-          <Form.Item name="username" label="New username" rules={[{ required: true }]} onChange={(event) => setUsernameValue(event.target.value)}>
-            <Input />
-          </Form.Item>
-        )}
-        { modalType === createType && (
-          <div className="modal__create">
-            <Form.Item name="title" label="Title" rules={[{ required: true }]} onChange={(event) => setTitleValue(event.target.value)}>
-              <Input />
-            </Form.Item>
-            <Form.Item name="tag" label="Tag" rules={[{ required: true }]} onChange={(event) => setTagValue(event.target.value)}>
-              <Input />
-            </Form.Item>
-            <Form.Item name="content" label="Content" rules={[{ required: true }]} onChange={(event) => setContentValue(event.target.value)}>
-              <Input.TextArea />
-            </Form.Item>
-            <input type="file" onChange={(event) => setImage(event.target.files[0])} />
-          </div>
-        )}
-      </Modal>
+      <UserPageModal
+        modalType={modalType}
+        isModalVisible={isModalVisible}
+        setIsModalVisible={setIsModalVisible}
+      />
     </div>
   );
 };
