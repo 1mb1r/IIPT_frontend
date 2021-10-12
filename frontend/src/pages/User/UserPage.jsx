@@ -8,6 +8,7 @@ import {
 
 import PostComponent from '../../components/posts/PostComponent';
 import UserPageModal from '../../components/modal/UserPageModal';
+import usePaging from '../../hooks/usePaging';
 import {
   getUser, editUser, authUser,
 } from '../../redux/actions/postsActionGenerators';
@@ -32,14 +33,16 @@ const UserPage = (props) => {
     dispatch(authUser());
   }, [dispatch]);
 
-  const { userData, fetching, error } = useSelector((state) => state.userData);
+  const {
+    userData, currentUser, fetching, error,
+  } = useSelector((state) => state.userData);
   const { posts } = userData;
   const [image, setImage] = useState(null);
   const [modalType, setModalType] = useState('');
-  const [currentPage, setCurrentPage] = useState(0);
-  const totalPages = Math.ceil(posts.length / postsPerPage);
   const [isModalVisible, setIsModalVisible] = useState(false);
-  const { currentUser } = useSelector((state) => state.userData);
+  const {
+    totalPages, currentPage, setCurrentPage, pageItems: postsPageItems,
+  } = usePaging(postsPerPage, posts);
   const showModal = () => {
     setIsModalVisible(true);
   };
@@ -94,17 +97,16 @@ const UserPage = (props) => {
       </div>
       {currentUser && currentUser?.id === userData.id && <Button className="user-page__add-post" type="primary" onClick={() => handleModalType(createType)}>Add new post</Button> }
       <div className="user-page__posts-cards posts-cards">
-        {posts.slice(currentPage * postsPerPage,
-          (currentPage + 1) * postsPerPage).map((el) => (
-            <PostComponent
-              key={el.id}
-              userId={el.user_id}
-              title={el.title}
-              content={el.content}
-              tags={el.tag}
-              author={String(el.author)}
-              image={el.image.url}
-            />
+        {postsPageItems.map((el) => (
+          <PostComponent
+            key={el.id}
+            userId={el.user_id}
+            title={el.title}
+            content={el.content}
+            tags={el.tag}
+            author={String(el.author)}
+            image={el.image.url}
+          />
         ))}
       </div>
       <div className="user-page__pagination pagination">

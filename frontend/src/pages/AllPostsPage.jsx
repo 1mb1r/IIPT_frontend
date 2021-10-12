@@ -5,6 +5,7 @@ import { useDispatch, useSelector } from 'react-redux';
 
 import { setPosts } from '../redux/actions/postsActionGenerators';
 import PostComponent from '../components/posts/PostComponent';
+import usePaging from '../hooks/usePaging';
 
 import './AllPostsPage.css';
 
@@ -17,11 +18,12 @@ const AllPostsPage = () => {
   }, [dispatch]);
   const allFiltersOptions = ['all', 'tag', 'author'];
   const { posts, fetching, error } = useSelector((state) => state.allPosts);
-  const [currentPage, setCurrentPage] = useState(0);
   const [searchState, setSearchState] = useState('');
   const [filterState, setFilterState] = useState('all');
   const [searchResult, setSearchResult] = useState([]);
-  const totalPages = Math.ceil(searchResult.length / postsPerPage);
+  const {
+    totalPages, currentPage, setCurrentPage, pageItems: postsPageItems,
+  } = usePaging(postsPerPage, searchResult);
   const normalizeStringAndSearch = (fieldValue) => fieldValue.toLowerCase().replaceAll('ё', 'е').includes(searchState);
   const searchPostsByFilter = () => {
     let result = [];
@@ -74,17 +76,16 @@ const AllPostsPage = () => {
       </select>
       <input className="all-posts__search" onChange={handleChange} type="search" />
       <div className="all-posts__posts-cards posts-cards">
-        {searchResult.slice(currentPage * postsPerPage,
-          (currentPage + 1) * postsPerPage).map((el) => (
-            <PostComponent
-              key={el.id}
-              userId={el.user_id}
-              title={el.title}
-              content={el.content}
-              tags={el.tag}
-              author={String(el.author)}
-              image={el.image}
-            />
+        {postsPageItems.map((el) => (
+          <PostComponent
+            key={el.id}
+            userId={el.user_id}
+            title={el.title}
+            content={el.content}
+            tags={el.tag}
+            author={String(el.author)}
+            image={el.image}
+          />
         ))}
       </div>
       <Pagination
