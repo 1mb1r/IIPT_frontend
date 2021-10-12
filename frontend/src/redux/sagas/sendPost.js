@@ -8,11 +8,14 @@ function setPost(payload) {
   const {
     title, content, tag, image, author, userId,
   } = payload;
-  return Api.post('/posts', {
-    post: {
-      title, content, tag, image, author, user_id: userId,
-    },
-  });
+  const formData = new FormData();
+  formData.append('title', title);
+  formData.append('content', content);
+  formData.append('tag', tag);
+  formData.append('image', image);
+  formData.append('author', author);
+  formData.append('user_id', userId);
+  return Api.post('/posts', formData);
 }
 
 function* sendPost(action) {

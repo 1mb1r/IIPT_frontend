@@ -3,6 +3,8 @@ import PropTypes from 'prop-types';
 import { Link } from 'react-router-dom';
 import { Card } from 'antd';
 
+import { getImageUrl } from '../../lib/utils';
+
 import 'antd/dist/antd.css';
 
 const PostComponent = ({
@@ -17,7 +19,7 @@ const PostComponent = ({
           cover={(
             <img
               alt={title}
-              src={image}
+              src={getImageUrl(image)}
             />
               )}
         >

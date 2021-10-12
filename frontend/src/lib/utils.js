@@ -1,5 +1,5 @@
 const bcrypt = require('bcryptjs');
 
-const getHashedPassword = (password) => bcrypt.hashSync(password, 12);
+export const getHashedPassword = (password) => bcrypt.hashSync(password, 12);
 
-export default getHashedPassword;
+export const getImageUrl = (image) => process.env.STATIC_URL + image;

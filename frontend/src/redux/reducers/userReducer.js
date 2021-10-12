@@ -3,7 +3,7 @@ import ActionTypes from '../constants/action-types';
 import { readToken } from '../../lib/local-storage';
 
 const initialState = {
-  userData: { posts: [] },
+  userData: { posts: [], avatar: { url: '' } },
   fetching: false,
   error: null,
   currentUser: null,
@@ -43,7 +43,7 @@ const userReducer = (state = initialState, action) => {
       return { ...state, error: null, fetching: true };
     case ActionTypes.SIGN_OUT_RECEIVED:
       return {
-        ...state, token: null, fetching: false,
+        ...state, token: null, currentUser: null, fetching: false,
       };
     case ActionTypes.SIGN_OUT_REJECTED:
       return { ...state, error: action.error, fetching: false };

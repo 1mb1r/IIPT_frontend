@@ -5,8 +5,11 @@ import Api from '../../api';
 import ActionTypes from '../constants/action-types';
 
 function updateUser(payload) {
-  const { id, username, token } = payload;
-  return Api.put(`/users/${id}`, { username }, { token });
+  const { id, username, avatar } = payload;
+  const formData = new FormData();
+  formData.append('username', username);
+  formData.append('avatar', avatar);
+  return Api.put(`/users/${id}`, formData);
 }
 
 function* editUser(action) {
