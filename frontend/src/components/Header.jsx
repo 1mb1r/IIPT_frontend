@@ -3,6 +3,7 @@
 import React, { useEffect } from 'react';
 import { Button } from 'antd';
 import { useDispatch, useSelector } from 'react-redux';
+import { gapi } from 'gapi-script';
 
 import { signOut, googleAuth } from '../redux/actions/postsActionGenerators';
 
@@ -11,8 +12,8 @@ const Header = () => {
   const { token } = useSelector((state) => state.userData);
 
   useEffect(() => {
-    window.gapi.load('auth2', () => {
-      window.gapi.auth2
+    gapi.load('client:auth2', () => {
+      gapi.auth2
         .init({
           client_id:
           process.env.REACT_APP_GOOGLE_CLIENT_ID,

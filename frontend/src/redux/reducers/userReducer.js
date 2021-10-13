@@ -8,7 +8,7 @@ const initialState = {
   error: null,
   currentUser: null,
   token: readToken() || '',
-  isGoogle: false,
+  isLocalStatic: true,
 };
 
 const userReducer = (state = initialState, action) => {
@@ -75,7 +75,7 @@ const userReducer = (state = initialState, action) => {
       return {
         ...state,
         currentUser: action.payload.data.user,
-        isGoogle: true,
+        isLocalStatic: false,
         fetching: false,
       };
     case ActionTypes.GOOGLE_AUTH_REJECTED:

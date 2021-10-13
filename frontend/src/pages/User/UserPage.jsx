@@ -35,7 +35,7 @@ const UserPage = (props) => {
   }, [dispatch]);
 
   const {
-    userData, currentUser, fetching, error, isGoogle,
+    userData, currentUser, fetching, error, isLocalStatic,
   } = useSelector((state) => state.userData);
   const { posts } = userData;
   const [image, setImage] = useState(null);
@@ -82,9 +82,9 @@ const UserPage = (props) => {
             size={{
               xxl: 200,
             }}
-            src={getImageUrl(userData.avatar.url)}
+            src={getImageUrl(userData.avatar.url, isLocalStatic)}
           />
-          {currentUser && currentUser?.id === userData.id && !isGoogle && (
+          {currentUser && currentUser?.id === userData.id && (
           <div className="avatar__upload upload">
             <input type="file" onChange={handleAvatar} />
             <button type="submit" onClick={handleSetAvatar}>Upload avatar</button>
@@ -93,7 +93,7 @@ const UserPage = (props) => {
         </div>
         <div className="user-info__username username">
           <h1 className="username__header">{userData.username}</h1>
-          {currentUser && currentUser?.id === userData.id && !isGoogle && <Button className="username__edit-button" type="primary" onClick={() => handleModalType(editType)}>Edit profile</Button>}
+          {currentUser && currentUser?.id === userData.id && <Button className="username__edit-button" type="primary" onClick={() => handleModalType(editType)}>Edit profile</Button>}
         </div>
       </div>
       {currentUser && currentUser?.id === userData.id && <Button className="user-page__add-post" type="primary" onClick={() => handleModalType(createType)}>Add new post</Button> }
