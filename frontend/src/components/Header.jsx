@@ -1,15 +1,32 @@
-import React from 'react';
+/* eslint-disable camelcase */
+/* eslint-disable react-hooks/exhaustive-deps */
+import React, { useEffect } from 'react';
 import { Button } from 'antd';
 import { useDispatch, useSelector } from 'react-redux';
+import { gapi } from 'gapi-script';
 
-import { signOut } from '../redux/actions/postsActionGenerators';
+import { signOut, googleAuth } from '../redux/actions/postsActionGenerators';
 
 const Header = () => {
   const dispatch = useDispatch();
   const { token } = useSelector((state) => state.userData);
 
+  useEffect(() => {
+    gapi.load('client:auth2', () => {
+      gapi.auth2
+        .init({
+          client_id:
+          process.env.REACT_APP_GOOGLE_CLIENT_ID,
+        });
+    });
+  }, []);
+
   const handleLogOut = () => {
     dispatch(signOut());
+  };
+
+  const googleSignIn = () => {
+    dispatch(googleAuth());
   };
 
   return (
@@ -26,6 +43,8 @@ const Header = () => {
           <Button href="/sign_in" type="primary">LOGIN</Button>
           {' '}
           <Button href="/sign_up" type="primary">Register</Button>
+          {' '}
+          <Button onClick={googleSignIn} type="primary">Sign in with google</Button>
         </div>
 
       )}

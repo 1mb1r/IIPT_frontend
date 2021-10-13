@@ -8,6 +8,7 @@ const initialState = {
   error: null,
   currentUser: null,
   token: readToken() || '',
+  isLocalStatic: true,
 };
 
 const userReducer = (state = initialState, action) => {
@@ -67,6 +68,17 @@ const userReducer = (state = initialState, action) => {
         fetching: false,
       };
     case ActionTypes.AUTH_REJECTED:
+      return { ...state, error: action.error, fetching: false };
+    case ActionTypes.GOOGLE_AUTH_REQUESTED:
+      return { ...state, error: null, fetching: true };
+    case ActionTypes.GOOGLE_AUTH_RECEIVED:
+      return {
+        ...state,
+        currentUser: action.payload.data.user,
+        isLocalStatic: false,
+        fetching: false,
+      };
+    case ActionTypes.GOOGLE_AUTH_REJECTED:
       return { ...state, error: action.error, fetching: false };
     default:
       return state;

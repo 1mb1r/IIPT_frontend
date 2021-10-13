@@ -7,6 +7,7 @@ import sendPost from './sagas/sendPost';
 import signOut from './sagas/signOut';
 import signIn from './sagas/signIn';
 import signUp from './sagas/signUp';
+import googleAuth from './sagas/googleAuth';
 import authUser from './sagas/authUser';
 
 function* rootSaga() {
@@ -20,6 +21,7 @@ function* rootSaga() {
       signOut(),
       signUp(),
       authUser(),
+      googleAuth(),
     ],
   );
 }

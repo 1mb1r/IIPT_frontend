@@ -35,7 +35,7 @@ const UserPage = (props) => {
   }, [dispatch]);
 
   const {
-    userData, currentUser, fetching, error,
+    userData, currentUser, fetching, error, isLocalStatic,
   } = useSelector((state) => state.userData);
   const { posts } = userData;
   const [image, setImage] = useState(null);
@@ -82,7 +82,7 @@ const UserPage = (props) => {
             size={{
               xxl: 200,
             }}
-            src={getImageUrl(userData.avatar.url)}
+            src={getImageUrl(userData.avatar.url, isLocalStatic)}
           />
           {currentUser && currentUser?.id === userData.id && (
           <div className="avatar__upload upload">

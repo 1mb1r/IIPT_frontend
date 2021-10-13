@@ -17,3 +17,5 @@ export const authUser = createAction(ActionTypes.AUTH_REQUESTED);
 export const signUp = createAction(ActionTypes.SIGN_UP_REQUESTED);
 
 export const signOut = createAction(ActionTypes.SIGN_OUT_REQUESTED);
+
+export const googleAuth = createAction(ActionTypes.GOOGLE_AUTH_REQUESTED);
