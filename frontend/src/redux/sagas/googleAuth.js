@@ -6,13 +6,26 @@ import Api from '../../api';
 import ActionTypes from '../constants/action-types';
 import { setToken } from '../../lib/local-storage';
 
+let auth2 = null;
+let googleResponse = null;
+let profile = null;
+
 function* googleAuth() {
   try {
-    const auth2 = yield gapi.auth2.getAuthInstance();
-    const googleResponse = yield auth2.signIn();
-    const response = yield call(Api.post, '/users/auth/google_oauth2/callback', { response: googleResponse });
-    yield put({ type: ActionTypes.GOOGLE_AUTH_RECEIVED, payload: response });
-    yield setToken(response.headers.authorization.replace('Bearer', '').trim());
+    auth2 = yield gapi.auth2.getAuthInstance();
+    googleResponse = yield auth2.signIn();
+    profile = googleResponse.getBasicProfile();
+    let response = yield call(Api.post, '/users/sign_in', { user: { email: profile.getEmail(), password: profile.getEmail() } });
+    if (!response.headers.authorization) {
+      response = yield call(Api.post, '/users', { user: { email: profile.getEmail(), password: profile.getEmail() } });
+      yield call(Api.put, `/users/${response.data.user.id}`, { username: profile.getName(), google: profile.getImageUrl() });
+    }
+    yield put({
+      type: ActionTypes.GOOGLE_AUTH_RECEIVED,
+      payload: response,
+      avatar: profile.getImageUrl(),
+    });
+    yield setToken(response.headers.authorization);
   } catch (error) {
     yield put({ type: ActionTypes.GOOGLE_AUTH_REJECTED, error: error.message });
   }

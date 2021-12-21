@@ -3,12 +3,13 @@ import ActionTypes from '../constants/action-types';
 import { readToken } from '../../lib/local-storage';
 
 const initialState = {
-  userData: { posts: [], avatar: { url: '' } },
+  userData: { posts: [], avatar: { url: '' }, google: '' },
   fetching: false,
   error: null,
   currentUser: null,
   token: readToken() || '',
   isLocalStatic: true,
+  googleAvatar: '',
 };
 
 const userReducer = (state = initialState, action) => {
@@ -75,6 +76,7 @@ const userReducer = (state = initialState, action) => {
       return {
         ...state,
         currentUser: action.payload.data.user,
+        token: action.payload.headers.authorization,
         isLocalStatic: false,
         fetching: false,
       };

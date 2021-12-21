@@ -1,4 +1,36 @@
-.user-info, .posts-cards {
+.user-info {
+    margin-top:40px;
+    margin-left: 2%;
+    margin-bottom:20px;
+    display: flex;
+    justify-content: space-between;
+    width: 800px;
+}
+
+.ant-avatar-image {
+    margin-bottom: 15px;
+}
+
+.username-header {
+    width:200px;
+}
+
+.user-page__add-post {
+    margin-left: 80px;
+}
+
+.posts-cards {
     display: flex;
     justify-content: space-around;
+    margin-top:40px;
+    margin-bottom:20px;
+}
+
+.pagination {
+    display: flex;
+    justify-content: space-around;
+}
+
+.username__header {
+    word-break: break-all;
 }

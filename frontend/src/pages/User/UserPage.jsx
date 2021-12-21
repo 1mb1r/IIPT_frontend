@@ -1,3 +1,5 @@
+/* eslint-disable no-unused-vars */
+/* eslint-disable react-hooks/rules-of-hooks */
 /* eslint-disable no-console */
 import React, { useEffect, useState } from 'react';
 import PropTypes from 'prop-types';
@@ -5,6 +7,7 @@ import { useDispatch, useSelector } from 'react-redux';
 import {
   Avatar, Alert, Pagination, Button,
 } from 'antd';
+import { useHistory } from 'react-router';
 
 import PostComponent from '../../components/posts/PostComponent';
 import UserPageModal from '../../components/modal/UserPageModal';
@@ -16,7 +19,8 @@ import { getImageUrl } from '../../lib/utils';
 
 import './UserPage.css';
 
-const postsPerPage = 1;
+const avatar = new FormData();
+const postsPerPage = 4;
 const editType = 'edit';
 const createType = 'create';
 
@@ -34,11 +38,16 @@ const UserPage = (props) => {
     dispatch(authUser());
   }, [dispatch]);
 
+  let posts = [];
   const {
     userData, currentUser, fetching, error, isLocalStatic,
   } = useSelector((state) => state.userData);
-  const { posts } = userData;
-  const [image, setImage] = useState(null);
+  const history = useHistory();
+  try {
+    posts = userData.posts;
+  } catch (er) {
+    return <Alert message={404} type="error" />;
+  }
   const [modalType, setModalType] = useState('');
   const [isModalVisible, setIsModalVisible] = useState(false);
   const {
@@ -54,11 +63,11 @@ const UserPage = (props) => {
   };
 
   const handleAvatar = (event) => {
-    setImage(event.target.files[0]);
+    avatar.append('avatar', event.target.files[0]);
   };
 
   const handleSetAvatar = () => {
-    const avatarData = { id, avatar: image };
+    const avatarData = { id, avatar };
     dispatch(editUser(avatarData));
   };
 
@@ -68,7 +77,6 @@ const UserPage = (props) => {
 
   if (error) {
     if (process.env.NODE_ENV !== 'production') {
-      console.error(error);
       return <Alert message={error} type="error" />;
     }
     return 'Error: hidden';
@@ -80,13 +88,16 @@ const UserPage = (props) => {
         <div className="user-info__avatar avatar">
           <Avatar
             size={{
-              xxl: 200,
+              xxl: 140,
             }}
-            src={getImageUrl(userData.avatar.url, isLocalStatic)}
+            src={
+              userData.avatar.url
+                ? getImageUrl(userData.avatar.url, isLocalStatic) : userData.google
+}
           />
           {currentUser && currentUser?.id === userData.id && (
           <div className="avatar__upload upload">
-            <input type="file" onChange={handleAvatar} />
+            <input accept=".jpg,.jpeg,.png" type="file" onChange={handleAvatar} />
             <button type="submit" onClick={handleSetAvatar}>Upload avatar</button>
           </div>
           )}
@@ -111,12 +122,14 @@ const UserPage = (props) => {
         ))}
       </div>
       <div className="user-page__pagination pagination">
+        {posts[0] && (
         <Pagination
           onChange={(page) => setCurrentPage(page - 1)}
           total={totalPages}
           current={currentPage + 1}
           pageSize={postsPerPage}
         />
+        )}
       </div>
       <UserPageModal
         modalType={modalType}

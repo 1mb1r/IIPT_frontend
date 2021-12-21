@@ -3,3 +3,26 @@
     justify-content: space-around;
     flex-wrap: wrap;
 }
+
+.inputs{
+    margin-top: 20px;
+}
+
+.header{
+    margin-left: 14px;
+}
+
+
+.login-form-button{
+    margin-right: 10px;
+}
+
+.login-form {
+    width: 500px;
+    margin: 20px auto;
+}
+
+.reg-form {
+    width: 500px;
+    margin: 20px auto;
+}

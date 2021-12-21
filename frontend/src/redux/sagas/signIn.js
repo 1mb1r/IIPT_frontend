@@ -13,7 +13,7 @@ function* signIn(action) {
       type: ActionTypes.SIGN_IN_RECEIVED,
       payload: response,
     });
-    yield setToken(response.headers.authorization.replace('Bearer', '').trim());
+    yield setToken(response.headers.authorization);
   } catch (error) {
     yield put({ type: ActionTypes.SIGN_IN_REJECTED, error: error.message });
   }

@@ -16,7 +16,7 @@ const UserPageModal = (props) => {
   const { modalType, isModalVisible, setIsModalVisible } = props;
   const { userData } = useSelector((state) => state.userData);
   const dispatch = useDispatch();
-  const [usernameValue, setUsernameValue] = useState('');
+  const [usernameValue, setUsernameValue] = useState(userData.username);
   const [image, setImage] = useState(null);
   const [titleValue, setTitleValue] = useState('');
   const [tagValue, setTagValue] = useState('');
@@ -24,10 +24,10 @@ const UserPageModal = (props) => {
 
   const handleSubmit = () => {
     setIsModalVisible(false);
-    if (modalType === editType) {
+    if (modalType === editType && usernameValue.trim() !== '') {
       const editedUserData = { username: usernameValue, id: userData.id };
       dispatch(editUser(editedUserData));
-    } else if (modalType === createType) {
+    } else if (modalType === createType && titleValue.trim() !== '' && tagValue.trim() !== '' && contentValue.trim() !== '') {
       const postData = {
         title: titleValue,
         content: contentValue,
@@ -42,14 +42,13 @@ const UserPageModal = (props) => {
 
   const handleCancel = () => {
     setIsModalVisible(false);
+    setUsernameValue(userData.username);
   };
 
   return (
-    <Modal title="Basic Modal" visible={isModalVisible} onOk={handleSubmit} onCancel={handleCancel}>
+    <Modal title="Edit username" visible={isModalVisible} onOk={handleSubmit} onCancel={handleCancel}>
       { modalType === editType && (
-      <Form.Item name="username" label="New username" rules={[{ required: true }]} onChange={(event) => setUsernameValue(event.target.value)}>
-        <Input />
-      </Form.Item>
+        <Input name="username" label="New username" value={usernameValue} rules={[{ required: true }]} onChange={(event) => setUsernameValue(event.target.value)} />
       )}
       { modalType === createType && (
       <div className="modal__create">
@@ -62,7 +61,7 @@ const UserPageModal = (props) => {
         <Form.Item name="content" label="Content" rules={[{ required: true }]} onChange={(event) => setContentValue(event.target.value)}>
           <Input.TextArea />
         </Form.Item>
-        <input type="file" onChange={(event) => setImage(event.target.files[0])} />
+        <input accept=".jpg,.jpeg,.png" type="file" onChange={(event) => setImage(event.target.files[0])} />
       </div>
       )}
     </Modal>

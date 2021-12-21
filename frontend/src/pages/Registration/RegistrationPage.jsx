@@ -1,3 +1,4 @@
+/* eslint-disable no-useless-escape */
 /* eslint-disable no-console */
 import React, { useState } from 'react';
 import { useHistory } from 'react-router';
@@ -7,8 +8,8 @@ import {
 import { useDispatch, useSelector } from 'react-redux';
 import { UserOutlined, LockOutlined } from '@ant-design/icons';
 
-import { signUp } from '../../redux/actions/postsActionGenerators';
-import { getHashedPassword } from '../../lib/utils';
+import { signUp, googleAuth } from '../../redux/actions/postsActionGenerators';
+// import { getHashedPassword } from '../../lib/utils';
 
 const RegistrationPage = () => {
   const dispatch = useDispatch();
@@ -17,21 +18,18 @@ const RegistrationPage = () => {
   const [email, setEmail] = useState('');
   const [password, setPassword] = useState('');
   const history = useHistory();
+
   const handleSignUp = () => {
-    dispatch(signUp({ email, password, username }));
+    if (username.trim() !== '') dispatch(signUp({ email, password, username }));
   };
 
   if (fetching) {
     return 'Loading...';
   }
 
-  if (error) {
-    if (process.env.NODE_ENV !== 'production') {
-      console.error(error);
-      return <Alert message={error} type="error" />;
-    }
-    return 'Error: hidden';
-  }
+  const googleSignIn = () => {
+    dispatch(googleAuth());
+  };
 
   const onFinish = () => {
     handleSignUp();
@@ -42,42 +40,49 @@ const RegistrationPage = () => {
   }
 
   return (
-    <Form
-      name="normal_login"
-      className="login-form"
-      onFinish={onFinish}
-    >
-      <Form.Item
-        name="username"
-        onChange={(event) => setUsername(event.target.value)}
-        rules={[{ required: true, message: 'Please input your Name!' }]}
+    <div className="reg-form">
+      {error && <Alert message="user exists" type="error" /> }
+      <Form
+        name="normal_login"
+        className="login-form"
+        onFinish={onFinish}
       >
-        <Input prefix={<UserOutlined className="site-form-item-icon" />} placeholder="Name" />
-      </Form.Item>
-      <Form.Item
-        name="email"
-        onChange={(event) => setEmail(event.target.value)}
-        rules={[{ required: true, type: 'email', message: 'Please input your Email!' }]}
-      >
-        <Input prefix={<UserOutlined className="site-form-item-icon" />} placeholder="Email" />
-      </Form.Item>
-      <Form.Item
-        onChange={(event) => setPassword(getHashedPassword(event.target.value))}
-        name="password"
-        rules={[{ required: true, message: 'Please input your Password!' }]}
-      >
-        <Input
-          prefix={<LockOutlined className="site-form-item-icon" />}
-          type="password"
-          placeholder="Password"
-        />
-      </Form.Item>
-      <Form.Item>
-        <Button type="primary" htmlType="submit" className="login-form-button">
-          Sign up
-        </Button>
-      </Form.Item>
-    </Form>
+        <Form.Item
+          name="username"
+          onChange={(event) => setUsername(event.target.value)}
+          rules={[{ required: true, message: 'Please input your Name!' }]}
+        >
+          <Input prefix={<UserOutlined className="site-form-item-icon" />} placeholder="Name" />
+        </Form.Item>
+        <Form.Item
+          name="email"
+          onChange={(event) => setEmail(event.target.value)}
+          rules={[{ required: true, type: 'email', message: 'Please input your Email!' }]}
+        >
+          <Input prefix={<UserOutlined className="site-form-item-icon" />} placeholder="Email" />
+        </Form.Item>
+        <Form.Item
+          onChange={(event) => setPassword(event.target.value)}
+          name="password"
+          rules={[{ required: true, message: 'Please input your Password!' }]}
+        >
+          <Input
+            prefix={<LockOutlined className="site-form-item-icon" />}
+            type="password"
+            placeholder="Password"
+          />
+        </Form.Item>
+        <Form.Item>
+          <Button type="primary" htmlType="submit" className="login-form-button">
+            Sign up
+          </Button>
+        </Form.Item>
+      </Form>
+      <Button type="primary" className="login-google-button" onClick={googleSignIn}>
+        Login with google
+      </Button>
+
+    </div>
   );
 };
 

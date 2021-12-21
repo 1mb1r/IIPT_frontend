@@ -1,17 +1,21 @@
 /* eslint-disable no-console */
 import React, { useEffect, useState } from 'react';
-import { Alert, Pagination } from 'antd';
+import {
+  Alert, Pagination, Select, Input,
+} from 'antd';
 import { useDispatch, useSelector } from 'react-redux';
 
-import { setPosts } from '../redux/actions/postsActionGenerators';
+import { setPosts, authUser } from '../redux/actions/postsActionGenerators';
 import PostComponent from '../components/posts/PostComponent';
 import usePaging from '../hooks/usePaging';
 
 import './AllPostsPage.css';
 
-const postsPerPage = 1;
+const postsPerPage = 4;
 
 const AllPostsPage = () => {
+  const { Option } = Select;
+
   const dispatch = useDispatch();
   useEffect(() => {
     dispatch(setPosts());
@@ -36,6 +40,10 @@ const AllPostsPage = () => {
   };
 
   useEffect(() => {
+    dispatch(authUser());
+  }, [dispatch]);
+
+  useEffect(() => {
     setSearchResult(searchPostsByFilter());
     setCurrentPage(0);
   // eslint-disable-next-line react-hooks/exhaustive-deps
@@ -46,8 +54,7 @@ const AllPostsPage = () => {
     setSearchState(value.toLowerCase());
   };
 
-  const handleChangeFilter = (event) => {
-    const { value } = event.target;
+  const handleChangeFilter = (value) => {
     setFilterState(value);
   };
 
@@ -57,7 +64,6 @@ const AllPostsPage = () => {
 
   if (error) {
     if (process.env.NODE_ENV !== 'production') {
-      console.error(error);
       return <Alert message={error} type="error" />;
     }
     return 'Error: hidden';
@@ -65,16 +71,19 @@ const AllPostsPage = () => {
 
   return (
     <div className="app__all-posts all-posts">
-      <select
-        className="all-posts__selector selector"
-        defaultValue="all"
-        onChange={handleChangeFilter}
-      >
-        {allFiltersOptions.map((option) => (
-          <option key={option} className={`selector__${option}`} value={option}>{`by ${option}`}</option>
-        ))}
-      </select>
-      <input className="all-posts__search" onChange={handleChange} type="search" />
+      <div className="inputs">
+        <Select
+          className="all-posts__selector selector"
+          defaultValue="all"
+          style={{ width: 120 }}
+          onChange={handleChangeFilter}
+        >
+          <Option value="all">all</Option>
+          <Option value="tag">by tag</Option>
+          <Option value="author">by author</Option>
+        </Select>
+        <Input className="all-posts__search" onChange={handleChange} style={{ width: 220 }} type="search" />
+      </div>
       <div className="all-posts__posts-cards posts-cards">
         {postsPageItems.map((el) => (
           <PostComponent
@@ -84,16 +93,18 @@ const AllPostsPage = () => {
             content={el.content}
             tags={el.tag}
             author={String(el.author)}
-            image={el.image}
+            image={el.image.url}
           />
         ))}
       </div>
-      <Pagination
-        onChange={(page) => setCurrentPage(page - 1)}
-        total={totalPages}
-        current={currentPage + 1}
-        pageSize={postsPerPage}
-      />
+      <div className="pagination">
+        <Pagination
+          onChange={(page) => setCurrentPage(page - 1)}
+          total={totalPages}
+          current={currentPage + 1}
+          pageSize={postsPerPage}
+        />
+      </div>
     </div>
   );
 };

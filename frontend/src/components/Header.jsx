@@ -5,11 +5,11 @@ import { Button } from 'antd';
 import { useDispatch, useSelector } from 'react-redux';
 import { gapi } from 'gapi-script';
 
-import { signOut, googleAuth } from '../redux/actions/postsActionGenerators';
+import { signOut } from '../redux/actions/postsActionGenerators';
 
 const Header = () => {
   const dispatch = useDispatch();
-  const { token } = useSelector((state) => state.userData);
+  const { token, currentUser } = useSelector((state) => state.userData);
 
   useEffect(() => {
     gapi.load('client:auth2', () => {
@@ -25,10 +25,6 @@ const Header = () => {
     dispatch(signOut());
   };
 
-  const googleSignIn = () => {
-    dispatch(googleAuth());
-  };
-
   return (
     <div className="app__header header">
       <div className="header__title">
@@ -37,16 +33,24 @@ const Header = () => {
       {token ? (
         <div>
           <Button onClick={handleLogOut} type="primary">LOGOUT</Button>
+          {' '}
+          { (window.location.pathname === '/') && <Button href={`/users/${currentUser?.id}`} type="primary">SEE MY PAGE</Button>}
+          {' '}
+          { (window.location.pathname !== '/') && <Button href="/" type="primary">Main page</Button>}
         </div>
       ) : (
         <div>
-          <Button href="/sign_in" type="primary">LOGIN</Button>
+          {(window.location.pathname !== '/sign_in' && window.location.pathname !== '/sign_up') && (
+          <>
+            <Button href="/sign_in" type="primary">LOGIN</Button>
+            {' '}
+            <Button href="/sign_up" type="primary">Register</Button>
+            {' '}
+          </>
+          )}
           {' '}
-          <Button href="/sign_up" type="primary">Register</Button>
-          {' '}
-          <Button onClick={googleSignIn} type="primary">Sign in with google</Button>
+          { (window.location.pathname !== '/') && <Button href="/" type="primary">Main page</Button>}
         </div>
-
       )}
     </div>
   );
